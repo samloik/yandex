@@ -1,0 +1,77 @@
+import sys
+
+j = sys.stdin.readline().strip()
+s = sys.stdin.readline().strip()
+
+result = 0
+for ch in s:
+	if ch in j:
+    	result += 1
+
+print(result)
+
+
+
+////
+
+
+import sys
+
+mine_coord = { }
+j = 0
+s = 0
+maxX = 0
+maxY = 0
+
+
+def find_mine(x, y):
+	count = 0
+	if x >= maxX or y >= maxY or x < 0 or y < 0:
+		return 0
+	else:
+		if mine_coord[x, y] == 1:
+			mine_coord[x, y] = 3
+			return 1
+		elif mine_coord[x, y] == 2:
+			return 0
+		else:
+			mine_coord[x, y] = 2
+			count += find_mine(x, y-1)
+			count += find_mine(x, y+1)
+			count += find_mine(x-1, y)
+			count += find_mine(x+1, y)
+			return count
+
+
+j = input().split()
+s = input().split()
+
+
+maxX = int(j[0])
+maxY = int(j[1])
+
+for x in range(maxX):
+	for y in range(maxY):
+		mine_coord[x, y] = 0
+
+
+for k in range( int(s[0])):
+	coord = sys.stdin.readline().split()
+	x = int(coord[0])-1
+	y = int(coord[1])-1
+	mine_coord[x, y] = 1
+
+
+count = 0
+
+for x in range(maxX):
+	for y in range(maxY):
+		if mine_coord[x, y] == 0:
+			r = find_mine(x, y)
+			count += 1
+
+
+
+print(count)
+
+
